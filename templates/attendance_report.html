@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Attendance Report</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+AttendFlow
+</div>
+
+<a href="/dashboard" class="btn">
+Dashboard
+</a>
+
+</div>
+
+<div class="container">
+
+<h1>Employee Attendance</h1>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Employee Name</th>
+    <th>Action</th>
+</tr>
+
+{% for employee in employees %}
+
+<tr>
+
+<td>{{ employee[0] }}</td>
+
+<td>{{ employee[1] }}</td>
+
+<td>
+
+<a
+href="/employee-attendance/{{ employee[0] }}/2026/6" class="btn">
+
+View Calendar
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

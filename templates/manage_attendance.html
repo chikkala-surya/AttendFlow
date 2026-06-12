@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Manage Attendance</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>
+Manage Attendance - {{ employee[0] }}
+</h1>
+
+<a href="/dashboard" class="btn">
+Dashboard
+</a>
+
+<br><br>
+
+<table>
+
+<tr>
+    <th>Date</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+{% for record in records %}
+
+<tr>
+
+<td>{{ record[1] }}</td>
+
+<td>{{ record[2] }}</td>
+
+<td>
+
+<a
+href="/delete-attendance/{{ record[0] }}/{{ employee_id }}"
+class="btn">
+
+Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

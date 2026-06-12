@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Reports</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Reports</h1>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>Attendance Report</h2>
+
+<a href="/attendance-report" class="btn">
+View Attendance
+</a>
+
+</div>
+
+<div class="card">
+
+<h2>Export Data</h2>
+
+<a href="/export-attendance" class="btn">
+Download CSV
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

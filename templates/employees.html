@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Employees</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+AttendFlow
+</div>
+
+<a href="/dashboard" class="btn">
+Dashboard
+</a>
+
+</div>
+
+<div class="container">
+
+<h1 style="margin-bottom:30px;">
+Employees
+</h1>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Employee..."
+style="
+width:100%;
+padding:12px;
+margin-bottom:20px;
+border-radius:10px;
+border:1px solid #ddd;
+">
+
+<table id="employeeTable">
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Department</th>
+    <th>Phone</th>
+    <th>Action</th>
+</tr>
+
+{% for employee in employees %}
+
+<tr>
+
+<td>{{ employee[0] }}</td>
+<td>{{ employee[1] }}</td>
+<td>{{ employee[2] }}</td>
+<td>{{ employee[3] }}</td>
+<td>{{ employee[4] }}</td>
+
+<td>
+
+<a
+href="/edit-employee/{{ employee[0] }}"
+class="btn">
+Edit
+</a>
+
+<a
+href="/delete-employee/{{ employee[0] }}"
+class="btn">
+Delete
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/add-employee" class="btn">
+Add Employee
+</a>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    document
+    .getElementById("searchInput")
+    .addEventListener("keyup", function() {
+
+        let filter =
+        this.value.toLowerCase();
+
+        let rows =
+        document.querySelectorAll(
+            "#employeeTable tr"
+        );
+
+        rows.forEach((row, index) => {
+
+            if(index === 0) return;
+
+            let text =
+            row.innerText.toLowerCase();
+
+            if(text.includes(filter))
+                row.style.display = "";
+            else
+                row.style.display = "none";
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

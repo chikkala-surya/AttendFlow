@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>AttendFlow Login</title>
+<title>Add Employee</title>
 
 <link rel="stylesheet"
 href="{{ url_for('static', filename='css/style.css') }}">
@@ -10,48 +10,55 @@ href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
+<div class="navbar">
+
+<div class="logo">
+AttendFlow
+</div>
+
+<a href="/employees" class="btn">
+Employees
+</a>
+
+</div>
+
 <div class="container">
 
-<div class="card" style="max-width:500px;margin:100px auto;">
+<div class="card">
 
-<h1 style="text-align:center;">
-AttendFlow
-</h1>
-
-<p style="text-align:center;margin-bottom:30px;color:#86868b;">
-Attendance Management System
-</p>
+<h1>Add Employee</h1>
 
 <form method="POST">
 
 <input
 type="text"
-name="username"
-placeholder="Username"
+name="name"
+placeholder="Employee Name"
 required>
 
 <input
-type="password"
-name="password"
-placeholder="Password"
+type="email"
+name="email"
+placeholder="Email Address"
+required>
+
+<input
+type="text"
+name="department"
+placeholder="Department"
+required>
+
+<input
+type="text"
+name="phone"
+placeholder="Phone Number"
 required>
 
 <button type="submit">
-Sign In
+Add Employee
 </button>
 
 </form>
-<div style="margin-top:20px;">
-
-<p>
-Don't have an account?
-</p>
-
-<a href="/register">
-Register Here
-</a>
-
-</div>
 
 </div>
 
@@ -79,5 +86,8 @@ Register Here
         </p>
 
     </div>
+
+</footer>
+
 </body>
 </html>

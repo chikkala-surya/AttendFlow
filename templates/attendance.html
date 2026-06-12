@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Attendance</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<div class="navbar">
+
+<div class="logo">
+AttendFlow
+</div>
+
+<a href="/dashboard" class="btn">
+Dashboard
+</a>
+
+</div>
+
+<div class="container">
+
+<h1>Mark Attendance</h1>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Employee Name</th>
+    <th>Action</th>
+</tr>
+
+{% for employee in employees %}
+
+<tr>
+
+<td>{{ employee[0] }}</td>
+
+<td>{{ employee[1] }}</td>
+
+<td>
+
+
+
+<form action="/mark-attendance" method="POST">
+
+<input
+type="hidden"
+name="employee_id"
+value="{{ employee[0] }}">
+
+<input
+type="date"
+name="attendance_date"
+value="{{ current_date }}"
+required
+style="
+width:180px;
+padding:8px;
+margin-right:10px;
+border-radius:8px;
+border:1px solid #ddd;
+">
+
+<button
+type="submit"
+name="status"
+value="Present">
+
+Present
+
+</button>
+
+<button
+type="submit"
+name="status"
+value="Absent">
+
+Absent
+
+</button>
+
+</form>
+
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<title>Register</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 <body>
 
 <div class="container">
 
-<h2>Register</h2>
+<h1>Create Account</h1>
 
 <form method="POST">
 
@@ -30,8 +34,10 @@ Register
 
 </form>
 
-<a href="/login">
-Already have account?
+<br>
+
+<a href="/login" class="btn">
+Login
 </a>
 
 </div>
