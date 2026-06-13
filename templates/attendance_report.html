@@ -1,65 +1,76 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
+
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Attendance Report</title>
 
 <link rel="stylesheet"
-href="{{ url_for('static', filename='css/style.css') }}">
+    href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
+
 <body>
 
 <div class="navbar">
 
-<div class="logo">
-AttendFlow
-</div>
+    <div class="logo">
+        AttendFlow
+    </div>
 
-<a href="/dashboard" class="btn">
-Dashboard
-</a>
+    <a href="/dashboard" class="btn">
+        Dashboard
+    </a>
 
 </div>
 
 <div class="container">
 
-<h1>Employee Attendance</h1>
+    <h1>Employee Attendance</h1>
 
-<table>
+    <div class="table-responsive">
 
-<tr>
-    <th>ID</th>
-    <th>Employee Name</th>
-    <th>Action</th>
-</tr>
+        <table>
 
-{% for employee in employees %}
+            <tr>
+                <th>ID</th>
+                <th>Employee Name</th>
+                <th>Action</th>
+            </tr>
 
-<tr>
+            {% for employee in employees %}
 
-<td>{{ employee[0] }}</td>
+            <tr>
 
-<td>{{ employee[1] }}</td>
+                <td>{{ employee[0] }}</td>
 
-<td>
+                <td>{{ employee[1] }}</td>
 
-<a
-href="/employee-attendance/{{ employee[0] }}/2026/6" class="btn">
+                <td>
 
-View Calendar
+                    <a href="/employee-attendance/{{ employee[0] }}/2026/6"
+                        class="btn">
 
-</a>
+                        View Calendar
 
-</td>
+                    </a>
 
-</tr>
+                </td>
 
-{% endfor %}
+            </tr>
 
-</table>
+            {% endfor %}
+
+        </table>
+
+    </div>
 
 </div>
 
 </body>
+
 </html>

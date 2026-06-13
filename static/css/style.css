@@ -230,3 +230,94 @@ form{
     font-size:13px;
     color:#86868b;
 }
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media screen and (max-width: 768px){
+
+    .navbar{
+        padding:15px 20px;
+        flex-direction:column;
+        gap:10px;
+        text-align:center;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .container{
+        padding:20px 15px;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    .hero-title{
+        font-size:36px;
+    }
+
+    .hero-subtitle{
+        font-size:18px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .card p{
+        font-size:32px;
+    }
+
+    .stats{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+        margin-bottom:10px;
+        margin-right:0;
+    }
+
+    button{
+        width:100%;
+    }
+
+    form{
+        max-width:100%;
+    }
+
+    input,
+    select{
+        font-size:16px;
+    }
+
+    table{
+        font-size:14px;
+    }
+
+    th,
+    td{
+        padding:10px;
+    }
+
+    .calendar{
+        gap:5px;
+    }
+
+    .calendar div{
+        padding:10px;
+        font-size:12px;
+    }
+
+    .footer{
+        padding:20px 10px;
+    }
+}
+.table-responsive{
+    overflow-x:auto;
+}
