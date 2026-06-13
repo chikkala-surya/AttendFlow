@@ -1,7 +1,6 @@
 import calendar
 from datetime import datetime
 from datetime import date
-from dbm import sqlite3
 import psycopg2
 import os
 from flask import Flask, render_template, request, redirect, session, Response
