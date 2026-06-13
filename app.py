@@ -1,11 +1,18 @@
 import calendar
 from datetime import datetime
 from datetime import date
-import sqlite3
-from flask import Flask, app, render_template, request, redirect, session, Response
+from dbm import sqlite3
+import psycopg2
+import os
+from flask import Flask, render_template, request, redirect, session, Response
 app = Flask(__name__)
 
 app.secret_key = "attendflow_secret_key"
+
+def get_db():
+    return psycopg2.connect(
+        os.environ["DATABASE_URL"]
+    )
 
 # ---------------- HOME ---------------- #
 
@@ -23,12 +30,12 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
-        conn = sqlite3.connect('attendance.db')
+        conn = get_db()
         cursor = conn.cursor()
 
         cursor.execute("""
         INSERT INTO admins(username,password)
-        VALUES(?,?)
+        VALUES(%s,%s)
         """,(username,password))
 
         conn.commit()
@@ -52,11 +59,11 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        conn = sqlite3.connect('attendance.db')
+        conn = get_db()
         cursor = conn.cursor()
 
         cursor.execute(
-            "SELECT * FROM admins WHERE username=? AND password=?",
+            "SELECT * FROM admins WHERE username=%s AND password=%s",
             (username, password)
         )
 
@@ -79,7 +86,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute(
@@ -92,14 +99,14 @@ def dashboard():
     cursor.execute("""
     SELECT COUNT(*)
     FROM attendance
-    WHERE date=? AND status='Present'
+    WHERE date=%s AND status='Present'
     """, (today,))
     present_today = cursor.fetchone()[0]
 
     cursor.execute("""
     SELECT COUNT(*)
     FROM attendance
-    WHERE date=? AND status='Absent'
+    WHERE date=%s AND status='Absent'
     """, (today,))
     absent_today = cursor.fetchone()[0]
 
@@ -133,7 +140,7 @@ def add_employee():
         department = request.form['department']
         phone = request.form['phone']
 
-        conn = sqlite3.connect('attendance.db')
+        conn = get_db()
         cursor = conn.cursor()
 
         admin_id = session['admin_id']
@@ -146,7 +153,7 @@ def add_employee():
             phone,
             admin_id
         )
-        VALUES(?,?,?,?,?)
+        VALUES(%s,%s,%s,%s,%s)
         """, (
             name,
             email,
@@ -168,13 +175,13 @@ def add_employee():
 @app.route('/employees')
 def employees():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     admin_id = session['admin_id']
 
     cursor.execute(
-        "SELECT * FROM employees WHERE admin_id=?",
+        "SELECT * FROM employees WHERE admin_id=%s",
         (admin_id,)
     )
     employees = cursor.fetchall()
@@ -192,13 +199,13 @@ def employees():
 @app.route('/attendance')
 def attendance():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     admin_id = session['admin_id']
 
     cursor.execute(
-        "SELECT * FROM employees WHERE admin_id=?",
+        "SELECT * FROM employees WHERE admin_id=%s",
         (admin_id,)
     )
 
@@ -220,13 +227,13 @@ def mark_attendance():
     status = request.form['status']
 
     attendance_date = request.form['attendance_date']
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("""
     SELECT *
     FROM attendance
-    WHERE employee_id=? AND date=?
+    WHERE employee_id=%s AND date=%s
     """, (employee_id, attendance_date))
 
     existing = cursor.fetchone()
@@ -239,7 +246,7 @@ def mark_attendance():
 
     cursor.execute("""
     INSERT INTO attendance(employee_id,date,status)
-    VALUES(?,?,?)
+    VALUES(%s,%s,%s)
     """, (employee_id, attendance_date, status))
     conn.commit()
     conn.close()
@@ -252,7 +259,7 @@ def mark_attendance():
 @app.route('/check-attendance')
 def check_attendance():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM attendance")
@@ -269,7 +276,7 @@ def check_attendance():
 @app.route('/attendance-report')
 def attendance_report():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     admin_id = session['admin_id']
@@ -277,7 +284,7 @@ def attendance_report():
     cursor.execute("""
     SELECT id,name
     FROM employees
-    WHERE admin_id=?
+    WHERE admin_id=%s
     """, (admin_id,))
 
     employees = cursor.fetchall()
@@ -292,7 +299,7 @@ def attendance_report():
 @app.route('/delete-employee/<int:id>')
 def delete_employee(id):
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     admin_id = session['admin_id']
@@ -300,7 +307,7 @@ def delete_employee(id):
     cursor.execute(
         """
         DELETE FROM employees
-        WHERE id=? AND admin_id=?
+        WHERE id=%s AND admin_id=%s
         """,
         (id, admin_id)
     )
@@ -313,7 +320,7 @@ def delete_employee(id):
 @app.route('/edit-employee/<int:id>', methods=['GET','POST'])
 def edit_employee(id):
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
     admin_id = session['admin_id']
 
@@ -321,7 +328,7 @@ def edit_employee(id):
         """
         SELECT *
         FROM employees
-        WHERE id=? AND admin_id=?
+        WHERE id=%s AND admin_id=%s
         """,
         (id, admin_id)
     )
@@ -340,8 +347,8 @@ def edit_employee(id):
 
         cursor.execute("""
         UPDATE employees
-        SET name=?, email=?, department=?, phone=?
-        WHERE id=?
+        SET name=%s, email=%s, department=%s, phone=%s
+        WHERE id=%s
         """, (name, email, department, phone, id))
 
         conn.commit()
@@ -361,7 +368,7 @@ def edit_employee(id):
 @app.route('/employee-attendance/<int:id>/<int:year>/<int:month>')
 def employee_attendance(id, year, month):
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
     admin_id = session['admin_id']
 
@@ -369,7 +376,7 @@ def employee_attendance(id, year, month):
         """
         SELECT *
         FROM employees
-        WHERE id=? AND admin_id=?
+        WHERE id=%s AND admin_id=%s
         """,
         (id, admin_id)
     )
@@ -383,7 +390,7 @@ def employee_attendance(id, year, month):
     cursor.execute("""
     SELECT date,status
     FROM attendance
-    WHERE employee_id=?
+    WHERE employee_id=%s
     """, (id,))
 
     records = cursor.fetchall()
@@ -464,14 +471,14 @@ def employee_attendance(id, year, month):
 @app.route('/manage-attendance/<int:id>')
 def manage_attendance(id):
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
     admin_id = session['admin_id']
     cursor.execute(
         """
         SELECT *
         FROM employees
-        WHERE id=? AND admin_id=?
+        WHERE id=%s AND admin_id=%s
         """,
         (id, admin_id)
     )
@@ -483,7 +490,7 @@ def manage_attendance(id):
         return "Access Denied"
 
     cursor.execute(
-        "SELECT name FROM employees WHERE id=?",
+        "SELECT name FROM employees WHERE id=%s",
         (id,)
     )
 
@@ -492,7 +499,7 @@ def manage_attendance(id):
     cursor.execute("""
     SELECT id,date,status
     FROM attendance
-    WHERE employee_id=?
+    WHERE employee_id=%s
     ORDER BY date DESC
     """,(id,))
 
@@ -510,11 +517,11 @@ def manage_attendance(id):
 @app.route('/delete-attendance/<int:id>/<int:employee_id>')
 def delete_attendance(id, employee_id):
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute(
-        "DELETE FROM attendance WHERE id=?",
+        "DELETE FROM attendance WHERE id=%s",
         (id,)
     )
 
@@ -530,7 +537,7 @@ def export_attendance():
 
     admin_id = session['admin_id']
 
-    conn = sqlite3.connect('attendance.db')
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -544,7 +551,7 @@ def export_attendance():
     JOIN employees
     ON attendance.employee_id = employees.id
 
-    WHERE employees.admin_id = ?
+    WHERE employees.admin_id = %s
 
     ORDER BY attendance.date DESC
     """, (admin_id,))
