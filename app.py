@@ -397,7 +397,7 @@ def employee_attendance(id, year, month):
     attendance_data = {}
 
     for record in records:
-        attendance_date = datetime.strptime(record[0], "%Y-%m-%d")
+        attendance_date = record[0]
 
         if (
             attendance_date.year == year and
