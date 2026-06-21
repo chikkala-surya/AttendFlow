@@ -1,46 +1,141 @@
 <!DOCTYPE html>
-<html>
-<head <meta name="viewport" content="width=device-width, initial-scale=1.0">>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2c3e50">
+    <title>Create Account - AttendFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .register-container {
+            min-height: calc(100vh - 160px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-<title>Register</title>
+        .register-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/style.css') }}">
+        .register-card h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
 
+        .register-card form {
+            max-width: 100%;
+        }
+
+        .register-card input {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .register-card button {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+            .register-container {
+                padding: 15px;
+            }
+
+            .register-card {
+                padding: 30px 20px;
+            }
+
+            .register-card h1 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .register-container {
+                padding: 12px;
+                min-height: calc(100vh - 120px);
+            }
+
+            .register-card {
+                padding: 20px 15px;
+            }
+
+            .register-card h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .register-card input {
+                padding: 11px 12px;
+                margin-bottom: 12px;
+            }
+
+            .register-card button {
+                padding: 11px 16px;
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <div class="navbar">
+        <div class="logo">📊 AttendFlow</div>
+    </div>
 
-<div class="container">
+    <div class="register-container">
+        <div class="register-card">
+            <h1>Create Account</h1>
 
-<h1>Create Account</h1>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Choose a Username" required autofocus>
+                <input type="password" name="password" placeholder="Create a Password" required>
+                <button type="submit">Register</button>
+            </form>
 
-<form method="POST">
+            <div class="login-link">
+                <p>Already have an account? <a href="/login">Login</a></p>
+            </div>
+        </div>
+    </div>
 
-<input
-type="text"
-name="username"
-placeholder="Username"
-required>
-
-<input
-type="password"
-name="password"
-placeholder="Password"
-required>
-
-<button type="submit">
-Register
-</button>
-
-</form>
-
-<br>
-
-<a href="/login" class="btn">
-Login
-</a>
-
-</div>
-
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>AttendFlow HRMS</h3>
+            <p>Designed & Developed by <strong>Ch. Surya Teja</strong></p>
+            <p>Email: suryachikkala09@gmail.com</p>
+            <p>Attendance Management System for Employee Tracking</p>
+            <p class="copyright">© 2026 AttendFlow. All Rights Reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
